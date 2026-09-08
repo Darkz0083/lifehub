@@ -3,179 +3,217 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DARKZ — Life + Projects Hub</title>
+<title>DARKZ — Projects & Life</title>
+<link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{--bg:#050507;--bg2:#0a0a0f;--glass:rgba(255,255,255,.06);--stroke:rgba(255,255,255,.12);--accent:#E50914;--accent2:#ff2a2a;--text:#fff;--muted:#9aa0aa;background:var(--bg);color:var(--text);font-family:Inter,"Helvetica Neue",Arial,sans-serif;overflow-x:hidden;min-height:100vh;transition:background .5s ease,color .5s ease}
-body[data-theme="carbon"]{--bg:#08080a;--bg2:#101014;--accent:#ff1a1a;--accent2:#ff5a5a}
-body[data-theme="navy"]{--bg:#040917;--bg2:#0a1430;--accent:#2a7bff;--accent2:#00d4ff}
-body[data-theme="toxic"]{--bg:#040705;--bg2:#0a120d;--accent:#00ff88;--accent2:#aaff00}
-body[data-theme="onyx"]{--bg:#0a0614;--bg2:#150b2e;--accent:#8b00ff;--accent2:#c26bff}
-body[data-theme="ice"]{--bg:#050a0e;--bg2:#0a1a22;--accent:#00d4ff;--accent2:#fff}
-body[data-theme="ember"]{--bg:#0c0603;--bg2:#1a0e06;--accent:#ff5a00;--accent2:#ffb300}
-body[data-theme="stealth"]{--bg:#0e0e10;--bg2:#1a1a1e;--accent:#9aa0aa;--accent2:#fff}
-body[data-theme="gold"]{--bg:#0a0803;--bg2:#1a1406;--accent:#d4af37;--accent2:#ffe88a}
-body[data-theme="matrix"]{--bg:#000;--bg2:#031003;--accent:#00ff00;--accent2:#003300}
-html{scroll-behavior:smooth}
-button,input,textarea,select{font-family:Inter,"Helvetica Neue",Arial,sans-serif}
-#bg3d{position:fixed;inset:0;z-index:0}
-#orbs{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;transition:opacity .6s ease}
-.orb{position:absolute;border-radius:50%;filter:blur(100px);opacity:.5;will-change:transform}
-.o1{width:560px;height:560px;background:radial-gradient(circle,var(--accent),transparent 70%);top:-140px;left:-140px;opacity:.32}
-.o2{width:640px;height:640px;background:radial-gradient(circle,#1a1a22,transparent 70%);bottom:-220px;right:-160px}
-.o3{width:380px;height:380px;background:radial-gradient(circle,var(--accent2),transparent 70%);top:45%;left:60%;opacity:.16}
-#gridBg{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .6s ease;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 90% 70% at 50% 40%,black 30%,transparent 75%)}
-body[data-bg="grid"] #gridBg{opacity:1}
-body[data-bg="grid"] #orbs{opacity:.25}
-body[data-bg="stars"] #orbs{opacity:.15}
-body[data-bg="off"] #orbs,body[data-bg="off"] #bg3d{opacity:0}
-body[data-bg="aurora"] .o1{width:800px;height:400px;filter:blur(120px);opacity:.45}
-body[data-bg="aurora"] .o3{width:700px;height:500px;opacity:.3}
-#vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 120% 90% at 50% 10%,transparent 50%,rgba(0,0,0,.55) 100%)}
-#cursorGlow{position:fixed;width:520px;height:520px;left:0;top:0;z-index:1;pointer-events:none;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 14%,transparent),transparent 65%);transform:translate(-50%,-50%);will-change:transform}
-nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(1200px,94vw);z-index:100;display:flex;align-items:center;gap:16px;padding:12px 20px;background:rgba(10,10,15,.8);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid var(--stroke);border-radius:999px;box-shadow:0 20px 60px rgba(0,0,0,.6)}.logo{font-weight:900;letter-spacing:1px;cursor:pointer;background:linear-gradient(135deg,#fff,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:Inter,"Helvetica Neue",Arial,sans-serif}.links{display:flex;gap:16px;font-size:14px;font-family:Inter,"Helvetica Neue",Arial,sans-serif}.links span{cursor:pointer;color:var(--muted);transition:color .25s}.links span:hover{color:#fff}.nav-right{margin-left:auto;display:flex;gap:10px;align-items:center}.pillBtn{border:1px solid var(--stroke);background:var(--glass);color:var(--text);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:13px;font-weight:500;font-family:Inter,"Helvetica Neue",Arial,sans-serif;transition:transform .2s ease}.pillBtn:hover{transform:translateY(-1px)}.pillBtn.solid{background:#fff;color:#000;font-weight:800}#userBtn,#settingsBtn{font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-size:13px;font-weight:500;letter-spacing:.1px}.searchGlass{background:rgba(0,0,0,.5);border:1px solid var(--stroke);border-radius:999px;padding:7px 14px;display:flex;gap:8px;align-items:center}.searchGlass input{background:transparent;border:none;outline:none;color:#fff;width:140px;font-family:Inter,"Helvetica Neue",Arial,sans-serif}
-#app{position:relative;z-index:2;width:min(1200px,94vw);margin:0 auto;padding:110px 0 40px}
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-bottom:22px}.glass{background:linear-gradient(180deg,var(--glass),rgba(0,0,0,.35));border:1px solid var(--stroke);border-radius:28px;padding:32px;backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);box-shadow:0 30px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s,background .5s ease;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}.heroMain h1{font-size:62px;line-height:.95;letter-spacing:-2px}.heroMain p{color:var(--muted);margin:14px 0;line-height:1.6}.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.chip{font-size:12px;border:1px solid var(--stroke);border-radius:999px;padding:6px 12px;background:rgba(0,0,0,.45)}.stats{display:flex;gap:12px;margin-top:16px}.stat{flex:1;background:rgba(0,0,0,.45);border:1px solid var(--stroke);border-radius:20px;padding:14px;text-align:center;transition:transform .3s}.stat:hover{transform:translateY(-3px)}.stat b{font-size:26px;display:block}.btnR{border:none;border-radius:999px;padding:13px 26px;font-weight:800;cursor:pointer;font-size:15px;font-family:Inter,"Helvetica Neue",Arial,sans-serif;transition:transform .2s ease,filter .2s}.btnR:hover{transform:translateY(-2px);filter:brightness(1.1)}.btnW{background:#fff;color:#000}.btnG{background:rgba(255,255,255,.1);color:#fff;border:1px solid var(--stroke);margin-left:10px}
-.avatarBox{display:flex;flex-direction:column;align-items:center;text-align:center;will-change:transform}#avatar{width:140px;height:140px;border-radius:50%;object-fit:cover;border:3px solid var(--stroke)}
-#musicPlayer{margin-top:16px;width:100%;background:rgba(0,0,0,.55);border:1px solid var(--stroke);border-radius:22px;padding:14px;text-align:left}#musicHead{display:flex;gap:12px;align-items:center}#playBtn{width:52px;height:52px;min-width:52px;border-radius:50%;border:none;background:#fff;color:#000;font-size:20px;cursor:pointer}#songTitle{font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:190px}#songTime{font-size:11px;color:var(--muted)}#eq{display:flex;gap:3px;height:32px;align-items:flex-end;margin:10px 0 6px}#eq span{flex:1;background:linear-gradient(180deg,#fff,var(--accent));border-radius:999px;height:14%;min-height:4px}#musicPlayer.playing #eq span{animation:eqB .7s ease-in-out infinite alternate}@keyframes eqB{from{height:12%}to{height:100%}}#progWrap{height:6px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden;cursor:pointer}#progBar{height:100%;width:0%;background:linear-gradient(90deg,#fff,var(--accent))}
-.secHead{display:flex;align-items:center;gap:12px;margin:26px 0 14px}.secHead h2{font-size:26px;letter-spacing:-.5px;font-family:Inter,"Helvetica Neue",Arial,sans-serif}.filterRow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.fPill{border:1px solid var(--stroke);border-radius:999px;padding:8px 16px;font-size:13px;cursor:pointer;color:var(--muted);background:rgba(255,255,255,.05);font-family:Inter,"Helvetica Neue",Arial,sans-serif}.fPill.on{background:#fff;color:#000;font-weight:800}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}.pCard{border-radius:28px;overflow:hidden;background:linear-gradient(180deg,var(--glass),rgba(0,0,0,.4));border:1px solid var(--stroke);backdrop-filter:blur(20px);cursor:pointer;transition:transform .3s cubic-bezier(.2,.7,.2,1.2);position:relative;animation:rise .6s ease both}.pCard:hover{transform:translateY(-7px) scale(1.015)}.pCard img.cover{width:100%;height:190px;object-fit:cover}.pCard .pad{padding:18px}.badge{font-size:11px;font-weight:800;padding:4px 10px;border-radius:999px;display:inline-block;margin-right:6px}.bPub{background:#16a34a}.bPriv{background:var(--accent)}.bGame{background:rgba(255,255,255,.12);border:1px solid var(--stroke)}.lock{position:absolute;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center}.lock input{background:#111;border:1px solid #444;color:#fff;border-radius:12px;padding:10px;width:80%}
-.timeline{display:grid;gap:12px}.tItem{display:flex;gap:14px;padding:16px 18px;background:rgba(0,0,0,.4);border:1px solid var(--stroke);border-radius:20px}
-#modal{position:fixed;inset:0;z-index:400;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;background:rgba(0,0,0,.72);padding:28px 0;backdrop-filter:blur(8px)}#modalBox{width:min(940px,95vw);background:#101014;border:1px solid var(--stroke);border-radius:32px;overflow:hidden;animation:pop .3s cubic-bezier(.2,.7,.3,1.2)}@keyframes pop{from{transform:scale(.94) translateY(12px);opacity:0}to{transform:none;opacity:1}}#mHero{position:relative;min-height:380px;background-size:cover;background-position:center}#mGrad{position:absolute;inset:0;background:linear-gradient(0deg,#101014 5%,transparent 60%)}#mClose{position:absolute;top:14px;right:14px;background:#000;border:none;color:#fff;width:38px;height:38px;border-radius:50%;cursor:pointer;z-index:2}#mBody{padding:18px 32px 32px}.fileRow{display:flex;gap:10px;align-items:center;padding:12px;background:rgba(255,255,255,.05);border:1px solid var(--stroke);border-radius:16px;margin:8px 0}.fileRow img{width:64px;height:64px;object-fit:cover;border-radius:12px}
-#dashView{display:none}.dashGrid{display:grid;grid-template-columns:380px 1fr;gap:16px}input,textarea,select{width:100%;background:#0b0b10;border:1px solid #2a2a32;color:#fff;border-radius:14px;padding:11px;margin:7px 0}input:focus,textarea:focus{border-color:var(--accent);outline:none}textarea{min-height:90px;resize:vertical}label{font-size:12px;color:var(--muted);font-family:Inter,"Helvetica Neue",Arial,sans-serif}pre{background:#000;border:1px solid #333;border-radius:14px;padding:12px;overflow:auto;max-height:220px;font-size:12px}
-#setWide{background:#101014;border:1px solid var(--stroke);border-radius:28px;padding:28px;width:min(640px,95vw);max-height:88vh;overflow:auto}#setWide h2,#setWide h3{font-family:Inter,"Helvetica Neue",Arial,sans-serif;letter-spacing:-.3px}#settingsModal{position:fixed;inset:0;z-index:700;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);padding:20px}.themeGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:12px 0}.themeBtn{border:2px solid transparent;border-radius:16px;padding:10px 6px;cursor:pointer;text-align:center;font-size:11px;color:#fff;font-family:Inter,"Helvetica Neue",Arial,sans-serif}.themeBtn.on{border-color:#fff}.themeDot{width:100%;height:36px;border-radius:10px;margin-bottom:6px}.bgGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.bgBtn{border:2px solid var(--stroke);border-radius:16px;padding:10px;cursor:pointer;background:rgba(255,255,255,.04);color:#fff;font-family:Inter,"Helvetica Neue",Arial,sans-serif;font-size:12px;text-align:left}.bgBtn.on{border-color:#fff;background:rgba(255,255,255,.1)}.bgPrev{width:100%;height:52px;border-radius:10px;margin-bottom:8px;position:relative;overflow:hidden}
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#fff;color:#000;padding:11px 22px;border-radius:999px;font-weight:800;display:none;z-index:900;opacity:0;transition:all .3s;font-family:Inter,"Helvetica Neue",Arial,sans-serif}#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
-body.no-motion *{animation:none!important;transition:none!important}
-@media(max-width:900px){.hero{grid-template-columns:1fr}.heroMain h1{font-size:42px}.dashGrid{grid-template-columns:1fr}nav .links{display:none}.themeGrid{grid-template-columns:repeat(3,1fr)}.bgGrid{grid-template-columns:repeat(2,1fr)}}
-</style>
 </head>
 <body data-theme="midnight" data-bg="orbs">
-<canvas id="bg3d"></canvas><div id="orbs"><div class="orb o1" id="orb1"></div><div class="orb o2" id="orb2"></div><div class="orb o3" id="orb3"></div></div><div id="gridBg"></div><div id="vignette"></div><div id="cursorGlow"></div>
-<nav><div class="logo" onclick="goHome()">🌙 DARKZ HUB</div><div class="links"><span onclick="goHome()">🏠 Home</span><span onclick="scrollToId('projects')">🚀 Projects</span><span onclick="scrollToId('about')">📖 About Life</span><span onclick="openDash()">📊 Dashboard</span></div><div class="nav-right"><div class="searchGlass">🔍<input id="q" placeholder="Search..." oninput="onSearch(this.value)"></div><button class="pillBtn" id="userBtn" onclick="switchUser()">👤 guest</button><button class="pillBtn" id="settingsBtn" onclick="openSettings()">Settings</button><button class="pillBtn solid" onclick="openDash()">➕ New</button></div></nav>
+<canvas id="bg3d"></canvas>
+<div id="grain"></div>
+<div id="vig"></div>
+
+<header>
+  <div class="brand" onclick="goHome()">
+    <div class="brand-mark">D</div>
+    <div><b>DARKZ</b><small id="verTag">HUB — V2</small></div>
+  </div>
+  <nav class="links" id="topLinks">
+    <button class="on" onclick="goHome()">Index</button>
+    <button onclick="scrollToId('projects')">Work</button>
+    <button onclick="scrollToId('about')">About</button>
+    <button onclick="openDash()">Studio</button>
+  </nav>
+  <div class="hspace"></div>
+  <div class="search"><span style="color:var(--faint)">/</span><input id="q" placeholder="Filter work…" oninput="onSearch(this.value)" autocomplete="off"></div>
+  <button class="btn ghost" id="userBtn" onclick="switchUser()">guest</button>
+  <button class="iconbtn" onclick="openSettings()" title="Settings">⚙</button>
+  <button class="btn hot" onclick="openDash()">+ New</button>
+</header>
+
 <div id="app">
-<div id="homeView">
-<div class="hero"><div class="glass heroMain"><div class="chips"><span class="chip" id="themeChip">● Midnight</span><span class="chip" id="bgChip">● Orbs</span></div><h1 id="hName">Darkz</h1><p id="hTag"></p><p id="hBio" style="color:#ddd"></p><div><button class="btnR btnW" onclick="scrollToId('projects')">🚀 Explore Projects</button><button class="btnR btnG" onclick="openDash()">📊 Open Dashboard</button></div><div class="stats"><div class="stat"><b id="stGames">0</b><span style="color:var(--muted);font-size:12px">🎮 Games</span></div><div class="stat"><b id="stSites">0</b><span style="color:var(--muted);font-size:12px">🌐 Sites</span></div><div class="stat"><b id="stFiles">0</b><span style="color:var(--muted);font-size:12px">📁 Files</span></div></div></div>
-<div class="glass avatarBox" id="tiltCard"><img id="avatar" src="https://picsum.photos/seed/darkz-avatar/300/300" alt="Profile avatar"><h2 id="aName" style="margin-top:12px">Darkz</h2><p id="aRole" style="color:var(--muted);font-size:13px">🎮 Creator • Roblox + Web</p>
-<div id="musicPlayer"><div id="musicHead"><button id="playBtn" onclick="togglePlay()">▶</button><div style="flex:1;min-width:0"><b id="songTitle">No track yet 🎵</b><div id="songTime">add song in Dashboard ⬇️</div></div><span style="font-size:10px;color:var(--muted);border:1px solid var(--stroke);padding:3px 8px;border-radius:999px">♪ DARKZ FM</span></div><div id="eq"></div><div id="progWrap" onclick="seekSong(event)"><div id="progBar"></div></div></div>
-<audio id="audioEl" preload="metadata"></audio>
-</div></div>
-<div class="secHead"><h2 id="projects">🚀 Projects Hub</h2><span style="color:var(--muted);font-size:13px" id="projCount"></span></div>
-<div class="filterRow" id="filters"><div class="fPill on" onclick="setFilter('all',this)">✨ All</div><div class="fPill" onclick="setFilter('game',this)">🎮 Games</div><div class="fPill" onclick="setFilter('site',this)">🌐 Sites</div><div class="fPill" onclick="setFilter('public',this)">🌍 Public</div><div class="fPill" onclick="setFilter('private',this)">🔒 Private</div></div>
-<div class="grid" id="grid"></div>
-<div class="secHead"><h2 id="about">📖 About My Life</h2><button class="pillBtn" onclick="openDash()">✏️ Edit in Dashboard</button></div>
-<div class="glass"><p id="aboutBio" style="line-height:1.7;color:#ddd"></p><div class="timeline" id="timeline" style="margin-top:14px"></div></div>
-<footer style="margin:30px 0;color:#666;font-size:13px">© 2026 Darkz Hub 🖤</footer>
+  <!-- ============ HOME ============ -->
+  <div id="homeView" class="view">
+    <div class="hero">
+      <div class="card">
+        <div class="kicker" id="themeKicker">MIDNIGHT — ORBS</div>
+        <h1 id="hName">Work that <em>ships.</em></h1>
+        <p class="sub" id="hBio"></p>
+        <div class="cta-row">
+          <button class="btn hot" onclick="scrollToId('projects')">Browse work ↓</button>
+          <button class="btn" onclick="openDash()">Open studio</button>
+        </div>
+        <div class="bigstats">
+          <div><b id="stGames">0</b><span>GAMES</span></div>
+          <div><b id="stSites">0</b><span>SITES</span></div>
+          <div><b id="stFiles">0</b><span>FILES</span></div>
+        </div>
+      </div>
+      <div class="card profile">
+        <div class="p-top">
+          <img id="avatar" src="https://picsum.photos/seed/darkz-avatar/300/300" alt="Profile avatar">
+          <div>
+            <h2><span class="status-dot"></span><span id="aName">Darkz</span></h2>
+            <p id="aRole">Creator — Roblox + Web</p>
+          </div>
+        </div>
+        <div class="player" id="musicPlayer">
+          <div class="pl-row">
+            <button id="playBtn" onclick="togglePlay()">▶</button>
+            <div class="pl-meta">
+              <span id="songTitle">No track yet</span>
+              <span id="songTime">add one in the studio ↓</span>
+            </div>
+          </div>
+          <div id="eq"></div>
+          <div id="progWrap" onclick="seekSong(event)"><div id="progBar"></div></div>
+        </div>
+        <audio id="audioEl" preload="metadata"></audio>
+      </div>
+    </div>
+
+    <div class="sec"><h2 id="projects">Selected work</h2><span class="count" id="projCount"></span></div>
+    <div class="filters" id="filters">
+      <button class="f on" onclick="setFilter('all',this)">All</button>
+      <button class="f" onclick="setFilter('game',this)">Games</button>
+      <button class="f" onclick="setFilter('site',this)">Sites</button>
+      <button class="f" onclick="setFilter('public',this)">Public</button>
+      <button class="f" onclick="setFilter('private',this)">Private</button>
+    </div>
+    <div class="grid" id="grid"></div>
+
+    <div class="sec"><h2 id="about">About</h2><span class="right"><button class="btn ghost" onclick="openDash()">Edit</button></span></div>
+    <div class="card about">
+      <p class="bio" id="aboutBio"></p>
+      <div class="tl" id="timeline"></div>
+    </div>
+
+    <footer>DARKZ HUB — MMXXVI. Built, not generated.</footer>
+  </div>
+
+  <!-- ============ STUDIO ============ -->
+  <div id="dashView" class="view" style="display:none">
+    <div class="sec"><h2>Studio</h2><span class="count">PRIVATE — OWNER ONLY</span>
+      <span class="right">
+        <button class="btn ghost" onclick="goHome()">← Back</button>
+        <button class="btn ghost" onclick="lockDash()">Lock</button>
+        <button class="btn ghost" onclick="exportJSON()">Export</button>
+        <button class="btn ghost" onclick="document.getElementById('imp').click()">Import</button>
+      </span>
+      <input type="file" id="imp" style="display:none" accept=".json,application/json" onchange="importJSON(this)">
+    </div>
+
+    <div id="lockBox" class="card">
+      <div id="setupBox" style="display:none">
+        <h3>Set a studio password</h3>
+        <p style="color:var(--muted);font-size:13px;margin:6px 0 10px">First time only. Stored on this device.</p>
+        <input id="newPass1" type="password" placeholder="New password" autocomplete="new-password">
+        <input id="newPass2" type="password" placeholder="Repeat it" autocomplete="new-password">
+        <div class="rowbtns"><button class="btn hot" onclick="setupFirstPass()">Create + unlock</button></div>
+      </div>
+      <div id="loginBox" style="display:none">
+        <h3>Locked</h3>
+        <p style="color:var(--muted);font-size:13px;margin:6px 0 10px">Owner password to continue.</p>
+        <input id="pinIn" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginDash()">
+        <div class="rowbtns"><button class="btn hot" onclick="loginDash()">Unlock</button></div>
+      </div>
+    </div>
+
+    <div id="dashMain" class="dash" style="display:none">
+      <div class="card">
+        <h3 id="edTitle">New project</h3>
+        <label class="fl">TITLE</label><input id="fTitle" maxlength="80">
+        <label class="fl">TYPE</label>
+        <select id="fKind"><option value="game">Game</option><option value="site">Site</option><option value="other">Other</option></select>
+        <label class="fl">DESCRIPTION</label><textarea id="fDesc" maxlength="2000"></textarea>
+        <label class="fl">LINK</label><input id="fLink" maxlength="500" placeholder="https://…">
+        <label class="fl">TAGS — COMMA SEPARATED</label><input id="fTags" maxlength="200">
+        <label class="fl">VISIBILITY</label>
+        <select id="fVis" onchange="togglePriv()"><option value="public">Public</option><option value="private">Private</option></select>
+        <div id="privBox" style="display:none">
+          <label class="fl">ALLOWED USERS</label><input id="fAllowed" maxlength="400">
+          <label class="fl">ACCESS CODE</label><input id="fCode" maxlength="64">
+        </div>
+        <label class="fl">COVER</label>
+        <input type="file" id="fCover" accept="image/*" onchange="handleCover(this)">
+        <img id="coverPrev" alt="Cover preview">
+        <div class="rowbtns">
+          <button class="btn hot" onclick="saveProject()">Save project</button>
+          <button class="btn ghost" onclick="resetEditor()">Clear</button>
+        </div>
+        <hr class="hr">
+        <h3>Profile track</h3>
+        <label class="fl">TRACK TITLE</label><input id="aSongIn" maxlength="120">
+        <label class="fl">UPLOAD AUDIO</label><input type="file" id="songFile" accept="audio/*" onchange="handleSong(this)">
+        <label class="fl">OR PASTE URL</label><input id="aSongUrlIn" maxlength="500">
+        <div class="rowbtns">
+          <button class="btn ghost" onclick="previewSong()">Test</button>
+          <button class="btn ghost" onclick="removeSong()">Remove</button>
+        </div>
+        <hr class="hr">
+        <h3>About</h3>
+        <label class="fl">NAME</label><input id="aNameIn" maxlength="40">
+        <label class="fl">TAGLINE</label><input id="aTagIn" maxlength="120">
+        <label class="fl">BIO</label><textarea id="aBioIn" maxlength="2000"></textarea>
+        <label class="fl">TIMELINE — ONE PER LINE</label><textarea id="aTimeIn" maxlength="3000"></textarea>
+        <label class="fl">AVATAR</label><input type="file" accept="image/*" onchange="handleAvatar(this)">
+        <div class="rowbtns">
+          <button class="btn hot" onclick="saveAbout()">Save about + track</button>
+          <button class="btn ghost" onclick="clearTimeline()">Clear timeline</button>
+        </div>
+      </div>
+      <div>
+        <div class="card"><h3>All projects</h3><div id="dashList"></div></div>
+        <div class="card" style="margin-top:14px"><h3>Files</h3>
+          <p style="color:var(--muted);font-size:12px" id="fileHint">Save a project first.</p>
+          <div id="fileBox"></div>
+          <div class="rowbtns">
+            <button class="btn ghost" onclick="addTextFile()">+ Text</button>
+            <button class="btn ghost" onclick="document.getElementById('fileUp').click()">+ Upload</button>
+            <input type="file" id="fileUp" style="display:none" multiple onchange="handleFiles(this)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div id="dashView">
-<div class="secHead"><h2>📊 Dashboard</h2><button class="pillBtn" onclick="goHome()">⬅️ Back</button><span style="margin-left:auto"></span><button class="pillBtn" onclick="lockDash()">🔒 Lock</button><button class="pillBtn" onclick="exportJSON()">📤 Export</button><button class="pillBtn" onclick="document.getElementById('imp').click()">📥 Import</button><input type="file" id="imp" style="display:none" accept=".json" onchange="importJSON(this)"></div>
-<div id="lockBox" class="glass"><div id="setupBox" style="display:none"><h3>🔐 Create dashboard password</h3><p style="color:var(--muted);font-size:13px">First time only ✨</p><input id="newPass1" type="password" placeholder="new password" autocomplete="new-password"><input id="newPass2" type="password" placeholder="repeat password" autocomplete="new-password"><button class="btnR btnW" onclick="setupFirstPass()">✨ Create + Unlock</button></div><div id="loginBox" style="display:none"><h3>🔒 Owner login</h3><p style="color:var(--muted);font-size:13px">Enter password to edit 🔑</p><input id="pinIn" type="password" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginDash()"><button class="btnR btnW" onclick="loginDash()">🔓 Unlock Dashboard</button></div></div>
-<div id="dashMain" style="display:none" class="dashGrid">
-<div class="glass"><h3 id="edTitle">➕ New Project</h3><label>Title 🏷️</label><input id="fTitle"><label>Type 🎮</label><select id="fKind"><option value="game">🎮 game</option><option value="site">🌐 site</option><option value="other">📦 other</option></select><label>Description 📝</label><textarea id="fDesc"></textarea><label>Link 🔗</label><input id="fLink"><label>Tags 🏷️</label><input id="fTags"><label>Visibility 👀</label><select id="fVis" onchange="togglePriv()"><option value="public">🌍 public</option><option value="private">🔒 private</option></select><div id="privBox" style="display:none"><label>Allowed users 👥</label><input id="fAllowed"><label>Access code 🔑</label><input id="fCode"></div><label>Cover 🖼️</label><input type="file" id="fCover" accept="image/*" onchange="handleCover(this)"><img id="coverPrev" style="width:100%;border-radius:16px;margin-top:8px;display:none" alt="Cover preview"><div style="display:flex;gap:8px;margin-top:12px"><button class="btnR btnW" onclick="saveProject()">💾 Save Project</button><button class="btnR btnG" onclick="resetEditor()">🧹 Clear</button></div>
-<div style="margin-top:16px;border-top:1px solid #333;padding-top:14px"><h3>🎵 Profile Song</h3><label>Song title 🎶</label><input id="aSongIn"><label>Upload mp3 🎧</label><input type="file" id="songFile" accept="audio/*" onchange="handleSong(this)"><label>Or URL 🔗</label><input id="aSongUrlIn"><div style="display:flex;gap:8px"><button class="pillBtn" onclick="previewSong()">▶️ Test</button><button class="pillBtn" onclick="removeSong()">🗑️ Remove</button></div></div>
-<div style="margin-top:16px;border-top:1px solid #333;padding-top:14px"><h3>📖 About Life</h3><label>Name 👤</label><input id="aNameIn"><label>Tagline ✨</label><input id="aTagIn"><label>Bio 📝</label><textarea id="aBioIn"></textarea><button class="pillBtn" onclick="clearBio()">🗑️ Clear Bio</button><label style="margin-top:10px;display:block">Timeline 🕒</label><textarea id="aTimeIn"></textarea><div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><button class="pillBtn" onclick="saveAbout()">💾 Save About + Song</button><button class="pillBtn" onclick="clearTimeline()">🗑️ Clear Timeline</button></div><label>Avatar 📸</label><input type="file" accept="image/*" onchange="handleAvatar(this)"></div></div>
-<div><div class="glass"><h3>📁 All Projects</h3><div id="dashList"></div></div><div class="glass" style="margin-top:14px"><h3>📁 Files</h3><p style="color:var(--muted);font-size:12px" id="fileHint">Save a project first ✨</p><div id="fileBox"></div><div style="display:flex;gap:8px;margin-top:10px"><button class="pillBtn" onclick="addTextFile()">📄 + Text</button><button class="pillBtn" onclick="document.getElementById('fileUp').click()">🖼️ + Upload</button><input type="file" id="fileUp" style="display:none" multiple onchange="handleFiles(this)"></div></div></div>
+
+<div id="settingsModal">
+  <div id="setWide">
+    <div style="display:flex;align-items:center"><h2 style="font-size:20px">Settings</h2>
+      <span style="flex:1"></span><button class="btn ghost" onclick="closeSettings()">Close</button></div>
+    <h3>THEME</h3><div class="tgrid" id="themeGrid"></div>
+    <h3>BACKDROP</h3><div class="bgrid" id="bgGrid"></div>
+    <h3>MOTION</h3>
+    <div class="rowbtns">
+      <button class="btn ghost" id="smoothBtn" onclick="toggleSmooth()">Motion: on</button>
+      <button class="btn ghost" id="particleBtn" onclick="toggleParticles()">Particles: on</button>
+    </div>
+    <h3>STUDIO PASSWORD</h3>
+    <input id="oldPass" type="password" placeholder="Current" autocomplete="current-password">
+    <input id="newPassChange" type="password" placeholder="New" autocomplete="new-password">
+    <div class="rowbtns">
+      <button class="btn ghost" onclick="changePassword()">Change</button>
+      <button class="btn ghost" onclick="lockDash()">Lock now</button>
+      <button class="btn ghost" onclick="resetHub()">Reset hub</button>
+    </div>
+  </div>
 </div>
+
+<div id="modal" onclick="if(event.target.id==='modal')closeModal()">
+  <div id="modalBox">
+    <div id="mHero"><div id="mGrad"></div><button id="mClose" onclick="closeModal()">✕</button></div>
+    <div id="mBody">
+      <h1 id="mTitle"></h1>
+      <div class="tags" id="mBadges" style="margin-top:10px"></div>
+      <div class="rowbtns"><button class="btn hot" onclick="playPrimary()">Open →</button>
+        <button class="btn ghost" onclick="editFromModal()">Edit</button></div>
+      <p id="mDesc"></p>
+      <div id="mFiles"></div>
+    </div>
+  </div>
 </div>
-</div>
-<div id="settingsModal"><div id="setWide"><div style="display:flex;align-items:center;gap:12px"><h2>Settings</h2><span style="margin-left:auto"></span><button class="pillBtn" onclick="closeSettings()">Close</button></div><h3 style="margin-top:16px">Themes</h3><div class="themeGrid" id="themeGrid"></div><h3 style="margin-top:16px">Background</h3><div class="bgGrid" id="bgGrid"></div><h3 style="margin-top:16px">Smoothness</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="pillBtn" id="smoothBtn" onclick="toggleSmooth()">Smooth: ON</button><button class="pillBtn" id="particleBtn" onclick="toggleParticles()">Particles: ON</button></div><h3 style="margin-top:16px">Dashboard Auth</h3><input id="oldPass" type="password" placeholder="current password" autocomplete="current-password"><input id="newPassChange" type="password" placeholder="new password" autocomplete="new-password"><div style="display:flex;gap:8px"><button class="pillBtn" onclick="changePassword()">Change Password</button><button class="pillBtn" onclick="lockDash()">Lock Now</button><button class="pillBtn" onclick="resetHub()">Reset Hub</button></div></div></div>
-<div id="modal" onclick="if(event.target.id==='modal')closeModal()"><div id="modalBox"><div id="mHero"><div id="mGrad"></div><button id="mClose" onclick="closeModal()">✕</button><div style="position:absolute;bottom:18px;left:28px;right:28px"><h1 id="mTitle"></h1><div id="mBadges"></div><div style="margin-top:12px"><button class="btnR btnW" onclick="playPrimary()">▶ Open</button> <button class="btnR btnG" onclick="editFromModal()">✏️ Edit</button></div></div></div><div id="mBody"><p id="mDesc"></p><div id="mFiles"></div></div></div></div>
+
 <div id="toast" role="status"></div>
-<script>
-"use strict";
-const $=id=>document.getElementById(id);
-let curFilter="all",curSearch="",editingId=null,currentItem=null,coverData="",isOwnerSession=false;
-let audioEl=null,isPlaying=false,audioCtx=null,analyser=null,rafId=null,songObjectUrl=null,lastAct=Date.now();
-let mx=0,my=0,cx=0,cy=0,gx=0,gy=0,threePts=null,threeRen=null,threeAnim=null;
-const esc=s=>String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";requestAnimationFrame(()=>t.classList.add("show"));clearTimeout(t._h);t._h=setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.style.display="none",300)},1800)}
-function uid(){return "p"+Date.now().toString(36)+Math.floor(Math.random()*999)}
-function curUser(){return localStorage.getItem("darkzhub-user")||"guest"}
-function getProjects(){try{const v=JSON.parse(localStorage.getItem("darkzhub-projects-v1")||"[]");return Array.isArray(v)?v:[]}catch{return[]}}
-function saveProjects(p){try{localStorage.setItem("darkzhub-projects-v1",JSON.stringify(p))}catch{toast("Storage full ⚠️")}}
-function getAbout(){try{return JSON.parse(localStorage.getItem("darkzhub-about-v1")||"null")}catch{return null}}
-function saveAboutStore(a){try{localStorage.setItem("darkzhub-about-v1",JSON.stringify(a))}catch{toast("Storage full ⚠️")}}
-function unlocked(){try{const v=JSON.parse(localStorage.getItem("darkzhub-unlocked")||"[]");return Array.isArray(v)?v:[]}catch{return[]}}
-const THEMES=[{id:"midnight",n:"Midnight",c:"linear-gradient(135deg,#050507,#E50914)"},{id:"carbon",n:"Carbon Red",c:"linear-gradient(135deg,#000,#ff1a1a)"},{id:"navy",n:"Navy Ops",c:"linear-gradient(135deg,#040917,#2a7bff)"},{id:"toxic",n:"Toxic",c:"linear-gradient(135deg,#000,#00ff88)"},{id:"onyx",n:"Onyx Purple",c:"linear-gradient(135deg,#000,#8b00ff)"},{id:"ice",n:"Ice Soldier",c:"linear-gradient(135deg,#000,#00d4ff)"},{id:"ember",n:"Ember",c:"linear-gradient(135deg,#000,#ff5a00)"},{id:"stealth",n:"Stealth Grey",c:"linear-gradient(135deg,#000,#9aa0aa)"},{id:"gold",n:"Gold King",c:"linear-gradient(135deg,#000,#d4af37)"},{id:"matrix",n:"Matrix",c:"linear-gradient(135deg,#000,#00ff00)"}];
-const BGS=[{id:"orbs",n:"Orbs",d:"soft glow orbs",p:"radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),transparent 60%),radial-gradient(circle at 70% 60%,rgba(255,255,255,.25),transparent 70%),#0a0a12"},{id:"aurora",n:"Aurora",d:"wide color wash",p:"linear-gradient(135deg,#0a0a18,#10202a 40%,#0a1420 70%,#0a0a18),radial-gradient(ellipse 80% 50% at 50% 0%,rgba(0,212,255,.25),transparent 70%)"},{id:"stars",n:"Stars",d:"tiny sharp stars",p:"radial-gradient(ellipse at center,#050508 0%,#000 100%)"},{id:"emberbg",n:"Ember",d:"warm rising dust",p:"radial-gradient(ellipse at 50% 100%,rgba(255,90,0,.2),transparent 60%),#070402"},{id:"nebula",n:"Nebula",d:"purple deep cloud",p:"radial-gradient(circle at 20% 20%,rgba(139,0,255,.3),transparent 50%),radial-gradient(circle at 80% 80%,rgba(0,212,255,.2),transparent 50%),#050510"},{id:"grid",n:"Grid",d:"clean perspective grid",p:"linear-gradient(#0a0a12,#0a0a12)"}];
-function getTheme(){return localStorage.getItem("darkzhub-theme")||"midnight"}
-function setTheme(t){if(!THEMES.some(x=>x.id===t))t="midnight";localStorage.setItem("darkzhub-theme",t);document.body.dataset.theme=t;$("themeChip").textContent="● "+(THEMES.find(x=>x.id===t)?.n||t);renderThemes()}
-function renderThemes(){if(!$("themeGrid"))return;const cur=getTheme();$("themeGrid").innerHTML=THEMES.map(t=>`<div class="themeBtn ${t.id===cur?"on":""}" onclick="setTheme('${t.id}')"><div class="themeDot" style="background:${t.c}"></div>${esc(t.n)}</div>`).join("")}
-function getBg(){const b=localStorage.getItem("darkzhub-bg")||"orbs";return BGS.some(x=>x.id===b)?b:"orbs"}
-function setBg(b){if(!BGS.some(x=>x.id===b))b="orbs";localStorage.setItem("darkzhub-bg",b);document.body.dataset.bg=b;$("bgChip").textContent="● "+(BGS.find(x=>x.id===b)?.n||b);renderBgs();initThree()}
-function renderBgs(){const cur=getBg();if(!$("bgGrid"))return;$("bgGrid").innerHTML=BGS.map(b=>`<div class="bgBtn ${b.id===cur?"on":""}" onclick="setBg('${b.id}')"><div class="bgPrev" style="background:${b.p}"></div><b>${esc(b.n)}</b><div style="font-size:11px;color:var(--muted)">${esc(b.d)}</div></div>`).join("")}
-function toggleSmooth(){const off=document.body.classList.toggle("no-motion");localStorage.setItem("darkzhub-smooth",off?"0":"1");$("smoothBtn").textContent="Smooth: "+(off?"OFF":"ON")}
-function toggleParticles(){const cur=localStorage.getItem("darkzhub-particles")!=="0";localStorage.setItem("darkzhub-particles",cur?"0":"1");$("particleBtn").textContent="Particles: "+(cur?"OFF":"ON");initThree()}
-function stopThree(){if(threeAnim)cancelAnimationFrame(threeAnim);threeAnim=null;if(threeRen){threeRen.dispose();threeRen=null}threePts=null;const cv=$("bg3d");if(cv){const ctx=cv.getContext("webgl");if(ctx)ctx.clearColor(0,0,0,0)}}
-function openSettings(){renderThemes();renderBgs();$("settingsModal").style.display="flex"}
-function closeSettings(){$("settingsModal").style.display="none"}
-async function hashPw(s){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("darkz::"+s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return "f"+h.toString(16)}}
-function hasAuth(){return !!localStorage.getItem("darkzhub-auth-hash")}
-function checkSession(){const t=sessionStorage.getItem("hubAuth");if(!t)return false;if(Date.now()-Number(t)>20*60*1000){sessionStorage.removeItem("hubAuth");return false}return true}
-function renderLock(){const has=hasAuth();$("setupBox").style.display=has?"none":"block";$("loginBox").style.display=has?"block":"none";if(isOwnerSession&&has){$("lockBox").style.display="none";$("dashMain").style.display="grid"}else if(!has){$("lockBox").style.display="block";$("dashMain").style.display="none"}else{$("lockBox").style.display=isOwnerSession?"none":"block";$("dashMain").style.display=isOwnerSession?"grid":"none"}}
-async function setupFirstPass(){const a=$("newPass1").value,b=$("newPass2").value;if(a.length<4){toast("Use 4+ chars ⚠️");return}if(a!==b){toast("No match ⚠️");return}localStorage.setItem("darkzhub-auth-hash",await hashPw(a));sessionStorage.setItem("hubAuth",Date.now()+"");isOwnerSession=true;$("newPass1").value="";$("newPass2").value="";renderLock();renderDash();toast("Password set ✅")}
-async function loginDash(){const v=$("pinIn").value;if(!v)return;const h=await hashPw(v);if(h===localStorage.getItem("darkzhub-auth-hash")){isOwnerSession=true;sessionStorage.setItem("hubAuth",Date.now()+"");lastAct=Date.now();$("pinIn").value="";renderLock();renderDash();syncDashInputs();toast("Unlocked ✅")}else toast("Wrong password ❌")}
-function lockDash(){isOwnerSession=false;sessionStorage.removeItem("hubAuth");renderLock();renderDash();toast("Locked 🔒")}
-async function changePassword(){const o=$("oldPass").value,n=$("newPassChange").value;if(n.length<4){toast("New 4+ chars");return}if((await hashPw(o))!==localStorage.getItem("darkzhub-auth-hash")){toast("Current wrong");return}localStorage.setItem("darkzhub-auth-hash",await hashPw(n));$("oldPass").value="";$("newPassChange").value="";toast("Password changed ✅")}
-function resetHub(){if(!confirm("Reset hub? 🗑️"))return;localStorage.removeItem("darkzhub-seeded");location.reload()}
-function idbOpen(){return new Promise((res,rej)=>{const r=indexedDB.open("darkzhub-db",1);r.onupgradeneeded=()=>r.result.createObjectStore("files");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-async function idbSet(k,v){const db=await idbOpen();return new Promise((res,rej)=>{const tx=db.transaction("files","readwrite");tx.objectStore("files").put(v,k);tx.oncomplete=res;tx.onerror=()=>rej(tx.error)})}
-async function idbGet(k){const db=await idbOpen();return new Promise((res,rej)=>{const q=db.transaction("files","readonly").objectStore("files").get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
-async function idbDel(k){const db=await idbOpen();return new Promise(res=>{const tx=db.transaction("files","readwrite");tx.objectStore("files").delete(k);tx.oncomplete=res;tx.onerror=res})}
-function seed(){if(getProjects().length||localStorage.getItem("darkzhub-seeded"))return;saveProjects([{id:uid(),title:"Unseen Liminality 👻",kind:"game",desc:"Backrooms horror — Rojo + Luau ✨",cover:"https://picsum.photos/seed/liminal-hub/800/450",tags:["roblox","horror"],visibility:"public",allowed:[],code:"",link:"",files:[]},{id:uid(),title:"NOVAFLIX 🎬",kind:"site",desc:"Netflix clone catalog 🍿",cover:"https://picsum.photos/seed/novaflix-hub/800/450",tags:["web"],visibility:"public",allowed:[],code:"",link:"",files:[]}]);
-saveAboutStore({name:"Darkz",role:"Creator",tag:"",bio:"",avatar:"https://picsum.photos/seed/darkz-avatar/300/300",songTitle:"",songUrl:"",timeline:[]});localStorage.setItem("darkzhub-seeded","1")}
-function canSee(p){if(p.visibility!=="private")return true;if(isOwnerSession)return true;if((p.allowed||[]).includes(curUser()))return true;if(unlocked().includes(p.id))return true;return false}
-function goHome(){$("homeView").style.display="block";$("dashView").style.display="none";renderAll()}
-function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:"smooth"})}
-function switchUser(){const n=prompt("Username? 👤",curUser());if(!n)return;localStorage.setItem("darkzhub-user",n.trim().slice(0,16));$("userBtn").textContent="👤 "+esc(n.trim().slice(0,12));renderProjects()}
-function setFilter(f,el){curFilter=f;document.querySelectorAll("#filters .fPill").forEach(x=>x.classList.remove("on"));el.classList.add("on");renderProjects()}
-function onSearch(v){curSearch=v.toLowerCase();renderProjects()}
-function fmt(s){if(!isFinite(s))return "0:00";s=Math.floor(s);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
-function buildEq(){const e=$("eq");if(e.children.length)return;let h="";for(let i=0;i<28;i++)h+="<span></span>";e.innerHTML=h}
-function initAudio(){audioEl=$("audioEl");buildEq();audioEl.addEventListener("timeupdate",()=>{if(!audioEl.duration)return;$("progBar").style.width=(audioEl.currentTime/audioEl.duration*100)+"%";$("songTime").textContent=fmt(audioEl.currentTime)+" / "+fmt(audioEl.duration)});audioEl.addEventListener("ended",()=>{isPlaying=false;$("musicPlayer").classList.remove("playing");$("playBtn").textContent="▶"})}
-function setupVisualizer(){try{if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=64;const src=audioCtx.createMediaElementSource(audioEl);src.connect(analyser);analyser.connect(audioCtx.destination)}audioCtx.resume()}catch{analyser=null}}
-function vizLoop(){if(!isPlaying)return;if(analyser){const d=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(d);document.querySelectorAll("#eq span").forEach((b,i)=>{const v=d[i%32]/255;b.style.animation="none";b.style.height=(12+v*88)+"%"})}rafId=requestAnimationFrame(vizLoop)}
-async function togglePlay(){if(!audioEl.src){toast("Add song in Dashboard 🎵");return}if(isPlaying){audioEl.pause();isPlaying=false;$("musicPlayer").classList.remove("playing");$("playBtn").textContent="▶";cancelAnimationFrame(rafId)}else{try{setupVisualizer()}catch{}await audioEl.play();isPlaying=true;$("musicPlayer").classList.add("playing");$("playBtn").textContent="⏸";vizLoop()}}
-function seekSong(e){if(!audioEl.duration)return;const r=$("progWrap").getBoundingClientRect();audioEl.currentTime=((e.clientX-r.left)/r.width)*audioEl.duration}
-async function loadSong(){const a=getAbout()||{};$("songTitle").textContent=(a.songTitle||"No track yet")+" 🎵";if(a.songUrl){if(songObjectUrl)URL.revokeObjectURL(songObjectUrl);audioEl.src=a.songUrl;return}try{const blob=await idbGet("profile-song");if(blob){if(songObjectUrl)URL.revokeObjectURL(songObjectUrl);songObjectUrl=URL.createObjectURL(blob);audioEl.src=songObjectUrl}}catch{}}
-async function handleSong(el){const f=el.files[0];if(!f)return;await idbSet("profile-song",f);const a=getAbout()||{};a.songTitle=$("aSongIn").value||f.name;a.songUrl="";saveAboutStore(a);if(songObjectUrl)URL.revokeObjectURL(songObjectUrl);songObjectUrl=URL.createObjectURL(f);audioEl.src=songObjectUrl;$("songTitle").textContent=a.songTitle+" 🎵";toast("Song saved 🎵")}
-function previewSong(){const u=$("aSongUrlIn").value.trim();if(!u)return;audioEl.src=u;audioEl.play().then(()=>{isPlaying=true;$("musicPlayer").classList.add("playing");$("playBtn").textContent="⏸";vizLoop()}).catch(()=>toast("Can't play that URL ⚠️"))}
-async function removeSong(){await idbDel("profile-song");const a=getAbout()||{};a.songTitle="";a.songUrl="";saveAboutStore(a);audioEl.removeAttribute("src");audioEl.load();isPlaying=false;$("musicPlayer").classList.remove("playing");$("playBtn").textContent="▶";$("songTitle").textContent="No track yet 🎵";toast("Song removed 🗑️")}
-function renderAll(){seed();if(!audioEl)initAudio();const a=getAbout()||{name:"Darkz",tag:"",bio:"",avatar:"",timeline:[]};$("hName").textContent=(a.name||"Darkz");$("hTag").textContent=a.tag||"";$("hBio").textContent=a.bio||"";$("aName").textContent=a.name||"Darkz";$("avatar").src=a.avatar||"https://picsum.photos/seed/darkz-avatar/300/300";$("aboutBio").textContent=a.bio||"";$("timeline").innerHTML=(a.timeline||[]).length?(a.timeline||[]).map(t=>`<div class="tItem"><span>✨</span><span>${esc(t)}</span></div>`).join(""):"";$("userBtn").textContent="👤 "+curUser();loadSong();renderProjects()}
-function syncDashInputs(){const a=getAbout()||{};$("aNameIn").value=a.name||"Darkz";$("aTagIn").value=a.tag||"";$("aBioIn").value=a.bio||"";$("aTimeIn").value=(a.timeline||[]).join("\n");$("aSongIn").value=a.songTitle||"";$("aSongUrlIn").value=a.songUrl||""}
-function renderProjects(){let all=getProjects();$("stGames").textContent=all.filter(p=>p.kind==="game").length;$("stSites").textContent=all.filter(p=>p.kind==="site").length;$("stFiles").textContent=all.reduce((s,p)=>s+(p.files||[]).length,0);let list=all.filter(p=>{if(curFilter==="game"&&p.kind!=="game")return false;if(curFilter==="site"&&p.kind!=="site")return false;if(curFilter==="public"&&p.visibility==="private")return false;if(curFilter==="private"&&p.visibility!=="private")return false;if(curSearch&&!(p.title+p.desc+(p.tags||[]).join(" ")).toLowerCase().includes(curSearch))return false;return true});$("projCount").textContent="✨ "+list.length+" projects";$("grid").innerHTML=list.length?list.map(p=>{const l=!canSee(p);const kindIcon=p.kind==="game"?"🎮":p.kind==="site"?"🌐":"📦";return `<div class="pCard" onclick='openProject("${p.id}")'><img class="cover" src="${esc(p.cover)}" alt="" loading="lazy" onerror="this.style.display='none'"><div class="pad"><span class="badge ${p.visibility==="private"?"bPriv":"bPub"}">${p.visibility==="private"?"🔒 PRIVATE":"🌍 PUBLIC"}</span><span class="badge bGame">${kindIcon} ${esc(p.kind)}</span><h3 style="margin:10px 0 6px">${esc(p.title)}</h3><p style="color:var(--muted);font-size:13px">${esc((p.desc||"").slice(0,110))}</p></div>${l?`<div class="lock"><b>🔒 Private 🔒</b><input id="code-${p.id}" placeholder="code 🔑" onclick="event.stopPropagation()" onkeydown="if(event.key==='Enter'){event.stopPropagation();unlockPrivate('${p.id}')}" aria-label="Access code"><button class="pillBtn" onclick='event.stopPropagation();unlockPrivate("${p.id}")'>🔓 Unlock</button></div>`:""}</div>`}).join(""):"<p style='color:#888'>No projects 😴 Open Dashboard ➕</p>"}
-function openProject(id){const p=getProjects().find(x=>x.id===id);if(!p)return;if(!canSee(p)){toast("Private 🔒");return}currentItem=p;$("modal").style.display="flex";document.body.style.overflow="hidden";$("mHero").style.backgroundImage=`url("${String(p.cover||"").replace(/"/g,"")}")`;$("mTitle").textContent=p.title+" ✨";$("mBadges").innerHTML=`<span class="badge ${p.visibility==="private"?"bPriv":"bPub"}">${p.visibility==="private"?"🔒 PRIVATE":"🌍 PUBLIC"}</span>`;$("mDesc").textContent=p.desc||"";$("mFiles").innerHTML=(p.files||[]).length?p.files.map(f=>f.type==="text"?`<div class="fileRow"><span>📄</span><div><b>${esc(f.name)}</b><pre>${esc(f.text||"")}</pre></div></div>`:`<div class="fileRow"><span>🖼️</span><img src="${esc(f.data||"")}" alt="" loading="lazy"><div><b>${esc(f.name)}</b></div></div>`).join(""):"<p style='color:#666'>No files 📭</p>"}
-function closeModal(){$("modal").style.display="none";document.body.style.overflow="auto"}
-function playPrimary(){if(currentItem?.link){try{const u=new URL(currentItem.link);if(u.protocol==="http:"||u.protocol==="https:")window.open(u.href,"_blank","noopener");else toast("Bad link ⚠️")}catch{toast("Bad link ⚠️")}}else toast("No link 🔗")}
-function editFromModal(){if(!isOwnerSession){toast("Login to edit 🔒");closeModal();openDash();return}const id=currentItem?.id;closeModal();openDash();if(id)openEditor(id)}
-function unlockPrivate(id){const p=getProjects().find(x=>x.id===id);const v=(document.getElementById("code-"+id)?.value||"").trim();if(p&&(v===p.code||(p.allowed||[]).includes(curUser()))){localStorage.setItem("darkzhub-unlocked",JSON.stringify([...new Set([...unlocked(),id])]));renderProjects();openProject(id)}else toast("Wrong code ❌")}
-function openDash(){$("homeView").style.display="none";$("dashView").style.display="block";if(checkSession())isOwnerSession=true;renderLock();if(isOwnerSession){renderDash();syncDashInputs()}window.scrollTo({top:0,behavior:"smooth"})}
-function renderDash(){if(!isOwnerSession){renderLock();return}renderLock();const all=getProjects();$("dashList").innerHTML=all.length?all.map(p=>`<div class="fileRow"><img src="${esc(p.cover||"")}" alt="" loading="lazy" onerror="this.style.display='none'"><div style="flex:1"><b>${esc(p.title)}</b><div style="font-size:12px;color:var(--muted)">${p.kind==="game"?"🎮":p.kind==="site"?"🌐":"📦"} ${esc(p.kind)} • ${p.visibility==="private"?"🔒 private":"🌍 public"}</div></div><button class="pillBtn" onclick='openEditor("${p.id}")'>✏️ Edit</button><button class="pillBtn" onclick='delProject("${p.id}")'>🗑️</button></div>`).join(""):"<p style='color:#888'>No projects 😴</p>";renderFileBox()}
-function renderFileBox(){const p=getProjects().find(x=>x.id===editingId);if(!p){$("fileHint").textContent="Save a project first ✨";$("fileBox").innerHTML="";return}$("fileHint").textContent="📁 Files for: "+p.title;$("fileBox").innerHTML=(p.files||[]).map((f,i)=>`<div class="fileRow"><span>${f.type==="text"?"📄":"🖼️"}</span><div style="flex:1"><b>${esc(f.name)}</b>${f.type==="text"?`<textarea onchange='editText(${i},this.value)'>${esc(f.text||"")}</textarea>`:`<img src="${esc(f.data||"")}" alt="" loading="lazy" style="max-width:120px;border-radius:10px">`}</div><button class="pillBtn" onclick="delFile(${i})">🗑️</button></div>`).join("")||"<p style='color:#666'>No files 📭</p>"}
-function togglePriv(){$("privBox").style.display=$("fVis").value==="private"?"block":"none"}
-function handleCover(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{coverData=r.result;$("coverPrev").src=coverData;$("coverPrev").style.display="block"};r.readAsDataURL(f)}
-function handleAvatar(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const a=getAbout()||{};a.avatar=r.result;saveAboutStore(a);renderAll()};r.readAsDataURL(f)}
-function openEditor(id){const p=getProjects().find(x=>x.id===id);editingId=id||null;if(!p){resetEditor();return}$("edTitle").textContent="✏️ Edit: "+p.title;$("fTitle").value=p.title;$("fKind").value=p.kind;$("fDesc").value=p.desc||"";$("fLink").value=p.link||"";$("fTags").value=(p.tags||[]).join(", ");$("fVis").value=p.visibility;$("fAllowed").value=(p.allowed||[]).join(", ");$("fCode").value=p.code||"";coverData=p.cover||"";if(coverData){$("coverPrev").src=coverData;$("coverPrev").style.display="block"}togglePriv();renderFileBox()}
-function resetEditor(){editingId=null;$("edTitle").textContent="➕ New Project";["fTitle","fDesc","fLink","fTags","fAllowed","fCode"].forEach(id=>$(id).value="");coverData="";$("coverPrev").style.display="none";renderFileBox()}
-function saveProject(){if(!isOwnerSession){toast("Login first 🔒");return}const t=$("fTitle").value.trim();if(!t){toast("Need title 🏷️");return}let all=getProjects();const obj={id:editingId||uid(),title:t.slice(0,80),kind:["game","site","other"].includes($("fKind").value)?$("fKind").value:"other",desc:$("fDesc").value.slice(0,2000),link:$("fLink").value.trim().slice(0,500),tags:$("fTags").value.split(",").map(s=>s.trim()).filter(Boolean).slice(0,12),visibility:$("fVis").value==="private"?"private":"public",allowed:$("fAllowed").value.split(",").map(s=>s.trim()).filter(Boolean).slice(0,32),code:$("fCode").value.trim().slice(0,64),cover:coverData||`https://picsum.photos/seed/${encodeURIComponent(t)}/800/450`,files:(all.find(x=>x.id===editingId)?.files||[])};all=editingId?all.map(x=>x.id===editingId?obj:x):[obj,...all];editingId=obj.id;saveProjects(all);renderAll();renderDash();toast("Saved ✅")}
-function delProject(id){if(!confirm("Delete? 🗑️"))return;saveProjects(getProjects().filter(x=>x.id!==id));if(editingId===id)resetEditor();renderAll();renderDash()}
-function addTextFile(){const p=getProjects().find(x=>x.id===editingId);if(!p){toast("Save first ✨");return}const n=prompt("Name? 📄","notes.txt");if(!n)return;p.files=p.files||[];p.files.push({name:n.slice(0,64),type:"text",text:"Edit me..."});saveProjects(getProjects().map(x=>x.id===p.id?p:x));renderDash()}
-function editText(i,v){const all=getProjects();const p=all.find(x=>x.id===editingId);if(!p||!p.files[i])return;p.files[i].text=String(v).slice(0,20000);saveProjects(all)}
-function delFile(i){const all=getProjects();const p=all.find(x=>x.id===editingId);if(!p||!p.files[i])return;p.files.splice(i,1);saveProjects(all.map(x=>x.id===p.id?p:x));renderDash()}
-function handleFiles(el){const p=getProjects().find(x=>x.id===editingId);if(!p){toast("Save first ✨");return}Array.from(el.files||[]).forEach(f=>{const r=new FileReader();r.onload=()=>{const all=getProjects();const t=all.find(x=>x.id===editingId);if(!t)return;t.files=t.files||[];t.files.push({name:f.name.slice(0,64),type:f.type.startsWith("image/")?"image":"file",data:r.result});saveProjects(all);renderDash()};r.readAsDataURL(f)});el.value=""}
-function saveAbout(){if(!isOwnerSession){toast("Login first 🔒");return}const a=getAbout()||{};a.name=$("aNameIn").value.trim().slice(0,40)||"Darkz";a.tag=$("aTagIn").value.slice(0,120);a.bio=$("aBioIn").value.slice(0,2000);a.timeline=$("aTimeIn").value.split("\n").map(s=>s.trim()).filter(s=>s.length>0).slice(0,50);a.songTitle=$("aSongIn").value.slice(0,120);a.songUrl=$("aSongUrlIn").value.trim().slice(0,500)||a.songUrl||"";if(a.songUrl){idbDel("profile-song")}saveAboutStore(a);renderAll();toast("Saved ✅")}
-function clearBio(){$("aBioIn").value="";saveAbout()}
-function clearTimeline(){$("aTimeIn").value="";saveAbout()}
-function exportJSON(){const b=new Blob([JSON.stringify({projects:getProjects(),about:getAbout()},null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="darkz-hub-backup.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
-function importJSON(el){const f=el.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(j&&Array.isArray(j.projects))saveProjects(j.projects);if(j&&j.about)saveAboutStore(j.about);renderAll();syncDashInputs();renderDash()}catch{toast("Bad JSON ⚠️")}};r.readAsText(f);el.value=""}
-function initSmooth(){if(localStorage.getItem("darkzhub-smooth")==="0")document.body.classList.add("no-motion");else document.body.classList.remove("no-motion");$("smoothBtn").textContent="Smooth: "+(localStorage.getItem("darkzhub-smooth")==="0"?"OFF":"ON");$("particleBtn").textContent="Particles: "+(localStorage.getItem("darkzhub-particles")==="0"?"OFF":"ON")}
-function makeOrbTexture(){const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d");const g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(0.25,"rgba(255,255,255,.9)");g.addColorStop(0.55,"rgba(255,255,255,.25)");g.addColorStop(1,"rgba(255,255,255,0)");x.fillStyle=g;x.fillRect(0,0,128,128);const t=new THREE.CanvasTexture(c);return t}
-function getBgConfig(bg){if(bg==="stars")return {n:1600,size:.14,op:.95,sp:.0004,col1:[1,1,1],col2:[.6,.7,1]};if(bg==="emberbg")return {n:700,size:.32,op:.8,sp:.0015,col1:[1,.45,.15],col2:[1,.8,.4]};if(bg==="nebula")return {n:800,size:.5,op:.7,sp:.0008,col1:[.6,.3,1],col2:[0,.8,1]};if(bg==="aurora")return {n:900,size:.4,op:.6,sp:.0009,col1:[0,.9,1],col2:[.5,1,.7]};if(bg==="grid")return {n:350,size:.22,op:.5,sp:.0006,col1:[.7,.7,.8],col2:[.5,.5,.6]};return {n:1000,size:.34,op:.75,sp:.0011,col1:[1,1,1],col2:[1,.35,.35]}}
-function initThree(){try{stopThree();if(localStorage.getItem("darkzhub-particles")==="0")return;if(!window.THREE)return;const bg=getBg();if(bg==="off")return;const canvas=$("bg3d");const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x050507,.028);const cam=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,.1,100);cam.position.z=18;const ren=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});ren.setSize(innerWidth,innerHeight);threeRen=ren;const cfg=getBgConfig(bg);const g=new THREE.BufferGeometry();const pos=new Float32Array(cfg.n*3);const col=new Float32Array(cfg.n*3);for(let i=0;i<cfg.n;i++){pos[i*3]=(Math.random()-.5)*60;pos[i*3+1]=(Math.random()-.5)*40;pos[i*3+2]=(Math.random()-.5)*30;const mix=Math.random();col[i*3]=cfg.col1[0]*mix+cfg.col2[0]*(1-mix);col[i*3+1]=cfg.col1[1]*mix+cfg.col2[1]*(1-mix);col[i*3+2]=cfg.col1[2]*mix+cfg.col2[2]*(1-mix)}g.setAttribute("position",new THREE.BufferAttribute(pos,3));g.setAttribute("color",new THREE.BufferAttribute(col,3));const tex=makeOrbTexture();const mat=new THREE.PointsMaterial({size:cfg.size,map:tex,transparent:true,opacity:cfg.op,vertexColors:true,depthWrite:false,blending:THREE.AdditiveBlending,sizeAttenuation:true});threePts=new THREE.Points(g,mat);scene.add(threePts);(function anim(){threeAnim=requestAnimationFrame(anim);if(document.body.classList.contains("no-motion")){ren.render(scene,cam);return}cx+=(mx-cx)*.04;cy+=(my-cy)*.04;threePts.rotation.y+=cfg.sp;threePts.rotation.x+=cfg.sp*.35;threePts.position.x=cx*.8;threePts.position.y=-cy*.6;cam.position.x+=(cx*2.2-cam.position.x)*.04;cam.position.y+=(-cy*1.6-cam.position.y)*.04;cam.lookAt(scene.position);const o1=$("orb1");const o2=$("orb2");if(o1)o1.style.transform=`translate(${cx*70}px,${cy*50}px)`;if(o2)o2.style.transform=`translate(${-cx*50}px,${-cy*40}px)`;const cg=$("cursorGlow");if(cg)cg.style.transform=`translate(${gx-260}px,${gy-260}px)`;ren.render(scene,cam)})();addEventListener("resize",()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();ren.setSize(innerWidth,innerHeight)})}catch{}}
-function initMouse(){document.addEventListener("mousemove",e=>{mx=(e.clientX/innerWidth-.5)*2;my=(e.clientY/innerHeight-.5)*2;gx=e.clientX;gy=e.clientY;lastAct=Date.now()});(function glow(){const cg=$("cursorGlow");if(cg&&!gx&&!gy){gx=innerWidth/2;gy=300}requestAnimationFrame(glow)})()}
-function tilt(){const c=$("tiltCard");let tx=0,ty=0,ccx=0,ccy=0;document.addEventListener("mousemove",e=>{tx=(e.clientX/innerWidth-.5)*12;ty=(e.clientY/innerHeight-.5)*-12});(function loop(){ccx+=(tx-ccx)*.08;ccy+=(ty-ccy)*.08;if(c&&!document.body.classList.contains("no-motion"))c.style.transform=`perspective(900px) rotateY(${ccx}deg) rotateX(${ccy}deg)`;requestAnimationFrame(loop)})()}
-document.addEventListener("mousemove",()=>{lastAct=Date.now()});setInterval(()=>{if(isOwnerSession&&Date.now()-lastAct>20*60*1000){lockDash()}},60000);
-document.body.dataset.theme=getTheme();document.body.dataset.bg=getBg();initSmooth();if(checkSession())isOwnerSession=true;renderAll();syncDashInputs();renderLock();tilt();initMouse();initThree();setTheme(getTheme());setBg(getBg());
-</script>
+<script src="app.js"></script>
 </body>
 </html>
